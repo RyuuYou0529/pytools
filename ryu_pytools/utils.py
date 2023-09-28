@@ -11,7 +11,7 @@ def tensor_info(t:object, name:str='Tensor'):
           f'std: {t.std()}\n'
           f'sum: {t.sum()}')
     
-def nparr_info(arr:np.ndarray, name:str='Tensor'):
+def nparr_info(arr:np.ndarray, name:str='Numpy Array'):
     print(f'[{name}]:\n'
           f'shape: {arr.shape}\n'
           f'dtype: {arr.dtype}\n'

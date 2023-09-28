@@ -145,11 +145,7 @@ def normalize_mi_ma(x, mi, ma, clip=False, eps=1e-20, dtype=np.float32):
         ma  = dtype(ma) if np.isscalar(ma) else ma.astype(dtype,copy=False)
         eps = dtype(eps)
 
-    try:
-        import numexpr
-        x = numexpr.evaluate("(x - mi) / ( ma - mi + eps )")
-    except ImportError:
-        x = (x - mi) / ( ma - mi + eps )
+    x = (x - mi) / ( ma - mi + eps )
 
     if clip:
         x = np.clip(x,0,1)
