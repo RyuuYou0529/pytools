@@ -1,8 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
 
 #========== plot ==========#
-def plot_some(*arr, figsize=None, dpi=None, suptitle:str=None, **kwargs):
+def plot_some(*arr, figsize=None, dpi=None, suptitle:str=None, colorbar_mode=None, **kwargs):
     """Quickly plot multiple images at once.
 
     each arr has to be a list of 2D or 3D images
@@ -26,9 +27,9 @@ def plot_some(*arr, figsize=None, dpi=None, suptitle:str=None, **kwargs):
     plt.figure(figsize=figsize, dpi=dpi)
     if not suptitle:
         plt.suptitle(suptitle)
-    return _plot_some(arr=arr, title_list=title_list, pmin=pmin, pmax=pmax, cmap=cmap, **imshow_kwargs)
+    return _plot_some(arr=arr, title_list=title_list, pmin=pmin, pmax=pmax, cmap=cmap, colorbar_mode=colorbar_mode, **imshow_kwargs)
 
-def _plot_some(arr, title_list=None, pmin=0, pmax=100, cmap='magma', **imshow_kwargs):
+def _plot_some(arr, title_list=None, pmin=0, pmax=100, cmap='magma', colorbar_mode=None, **imshow_kwargs):
     """
     plots a matrix of images
 
@@ -46,6 +47,7 @@ def _plot_some(arr, title_list=None, pmin=0, pmax=100, cmap='magma', **imshow_kw
     """
     imshow_kwargs['cmap'] = cmap
 
+
     def make_acceptable(a):
         return np.asarray(a)
     def color_image(a):
@@ -58,7 +60,10 @@ def _plot_some(arr, title_list=None, pmin=0, pmax=100, cmap='magma', **imshow_kw
     arr = map(make_acceptable,arr)
     arr = map(color_image,arr)
     arr = map(max_project,arr)
-    arr = list(arr)
+    # arr = list(arr)
+    arr = np.asarray(list(arr))
+    if colorbar_mode in ['uniform', 2]:
+        imshow_kwargs['norm'] = matplotlib.colors.Normalize(vmin=arr.min(), vmax=arr.max())
 
     h = len(arr)
     w = len(arr[0])
@@ -74,6 +79,8 @@ def _plot_some(arr, title_list=None, pmin=0, pmax=100, cmap='magma', **imshow_kw
             if pmin!=0 or pmax!=100:
                 img = normalize(img,pmin=pmin,pmax=pmax,clip=True)
             plt.imshow(np.squeeze(img),**imshow_kwargs)
+            if colorbar_mode in ['single', 'uniform', 1, 2]:
+                plt.colorbar(shrink=0.5)
             plt.axis("off")
 
 
