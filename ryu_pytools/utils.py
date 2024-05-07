@@ -19,6 +19,7 @@ def arr_info(arr, name:str='Array'):
     if type(arr) == torch.Tensor:
         print(f'device: {arr.device}')
     print('==========')
+    
 def plot_mip(data:np.ndarray, figsize=(10,4), dpi=300, suptitle:str=None):
     assert len(data.shape)==3, 'The dimension of input array should be 3.'
     show_list = []

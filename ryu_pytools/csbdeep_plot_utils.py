@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 
 #========== plot ==========#
-def plot_some(*arr, figsize=None, dpi=None, suptitle:str=None, colorbar_mode=None, **kwargs):
+def plot_some(*arr, figsize=None, dpi=None, suptitle:str=None, colorbar_mode=None, show_axis=True, **kwargs):
     """Quickly plot multiple images at once.
 
     each arr has to be a list of 2D or 3D images
@@ -25,11 +25,11 @@ def plot_some(*arr, figsize=None, dpi=None, suptitle:str=None, colorbar_mode=Non
     imshow_kwargs = kwargs
 
     plt.figure(figsize=figsize, dpi=dpi)
-    if not suptitle:
+    if suptitle:
         plt.suptitle(suptitle)
-    return _plot_some(arr=arr, title_list=title_list, pmin=pmin, pmax=pmax, cmap=cmap, colorbar_mode=colorbar_mode, **imshow_kwargs)
+    return _plot_some(arr=arr, title_list=title_list, pmin=pmin, pmax=pmax, cmap=cmap, colorbar_mode=colorbar_mode, show_axis=show_axis, **imshow_kwargs)
 
-def _plot_some(arr, title_list=None, pmin=0, pmax=100, cmap='magma', colorbar_mode=None, **imshow_kwargs):
+def _plot_some(arr, title_list=None, pmin=0, pmax=100, cmap='magma', colorbar_mode=None, show_axis=True, **imshow_kwargs):
     """
     plots a matrix of images
 
@@ -81,7 +81,8 @@ def _plot_some(arr, title_list=None, pmin=0, pmax=100, cmap='magma', colorbar_mo
             plt.imshow(np.squeeze(img),**imshow_kwargs)
             if colorbar_mode in ['single', 'uniform', 1, 2]:
                 plt.colorbar(shrink=0.5)
-            plt.axis("off")
+            if not show_axis:
+                plt.axis("off")
 
 
 def to_color(arr, pmin=1, pmax=99.8, gamma=1., colors=((0, 1, 0), (1, 0, 1), (0, 1, 1))):
